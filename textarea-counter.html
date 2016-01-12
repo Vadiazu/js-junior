@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sliding panel</title>
+	<style>
+		.panel-holder{
+			width: 100px;
+			height: 100px;
+			margin: 240px auto 0;
+			background: #000;
+			position: relative;
+		}
+		.slide-panel{
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background: red;
+			left: -9999px;
+			right: -9999px;
+		}
+	</style>
+</head>
+<body>
+	<p>
+		Две колонки, между ними кнопки. Можно отметить пункты в одной колонке и нажав на кнопку переместить в другой, анимация перемещения обязательна
+	</p>
+	<div class="column-wrapper">
+		<div class="left-column">
+
+		</div>
+		<div class="middle-column">
+
+		</div>
+		<div class="right-column">
+
+		</div>
+	</div>
+	<script src="jquery-1.11.2.min.js"></script>
+	<script>
+	jQuery(document).ready(function(){
+		var panel = jQuery('.slide-panel'),
+			panelWidth = panel.outerWidth(),
+			panelHeight = panel.outerHeight();
+		$('.slide-open').click(function(){
+
+		});
+	});
+	</script>
+</body>
+</html>

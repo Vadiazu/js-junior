@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sliding panel</title>
+	<style>
+		.panel-holder{
+			width: 100px;
+			height: 100px;
+			margin: 240px auto 0;
+			background: #000;
+			position: relative;
+		}
+		.slide-panel{
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			background: red;
+			left: -9999px;
+			right: -9999px;
+		}
+	</style>
+</head>
+<body>
+	<button class="slide-open" data-side="left">Open panel left</button>
+	<button class="slide-open" data-side="right">Open panel right</button>
+	<button class="slide-open" data-side="top">Open panel top</button>
+	<button class="slide-open" data-side="bottom">Open panel bottom</button>
+	<div class="panel-holder">
+		<div class="slide-panel"></div>
+	</div>
+	<script src="jquery-1.11.2.min.js"></script>
+	<script>
+	jQuery(document).ready(function(){
+		var panel = jQuery('.slide-panel'),
+			panelWidth = panel.outerWidth(),
+			panelHeight = panel.outerHeight();
+		$('.slide-open').click(function(){
+			var slideDirection = jQuery(this).data('side');
+			if(slideDirection == 'left'){
+				panel.css({
+					right: '100%',
+					left: 'auto',
+					top: 0,
+					width: 0
+				});
+				panel.animate({width: panelWidth}, 500);
+			} else if(slideDirection == 'right'){
+				panel.css({
+					left: '100%',
+					right: 'auto',
+					top: 0,
+					width: 0
+				});
+				panel.animate({width: panelWidth}, 500);
+			} else if(slideDirection == 'top'){
+				panel.css({
+					left: 0,
+					right: 'auto',
+					bottom: '100%',
+					top: 'auto',
+					height: 0
+				});
+				panel.animate({height: panelHeight}, 500);
+			} else if(slideDirection == 'bottom'){
+				panel.css({
+					left: 0,
+					right: 'auto',
+					top: '100%',
+					bottom: 'auto',
+					height: 0
+				});
+				panel.animate({height: panelHeight}, 500);
+			}
+		});
+	});
+	</script>
+</body>
+</html>
