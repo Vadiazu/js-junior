@@ -2,50 +2,38 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Sliding panel</title>
+	<title>Textarea counter</title>
 	<style>
-		.panel-holder{
-			width: 100px;
-			height: 100px;
-			margin: 240px auto 0;
-			background: #000;
-			position: relative;
-		}
-		.slide-panel{
-			position: absolute;
-			width: 100px;
-			height: 100px;
-			background: red;
-			left: -9999px;
-			right: -9999px;
-		}
+		.counter{
+			height: 20px;}
 	</style>
 </head>
 <body>
-	<p>
-		Две колонки, между ними кнопки. Можно отметить пункты в одной колонке и нажав на кнопку переместить в другой, анимация перемещения обязательна
-	</p>
-	<div class="column-wrapper">
-		<div class="left-column">
-
-		</div>
-		<div class="middle-column">
-
-		</div>
-		<div class="right-column">
-
-		</div>
+<p>
+	Счетчик введенных/оставшихся символов при вводе текста в "<"textarea">" (с поддержкой ограничения количества символов)
+</p>
+<div class="column-wrapper">
+	<div class="counter">
+		<strong>current:</strong><span class="cur"></span>
+		<strong>max:</strong><span class="max"></span>
 	</div>
-	<script src="jquery-1.11.2.min.js"></script>
-	<script>
+	<textarea name="" id="text-holder" cols="30" rows="10"></textarea>
+</div>
+<script src="jquery-1.11.2.min.js"></script>
+<script>
 	jQuery(document).ready(function(){
-		var panel = jQuery('.slide-panel'),
-			panelWidth = panel.outerWidth(),
-			panelHeight = panel.outerHeight();
-		$('.slide-open').click(function(){
-
+		var maxLength = prompt('Enter textarea max length'),
+			cur = jQuery('.cur'),
+			max = jQuery('.max'),
+			holder = jQuery('#text-holder');
+		//max lenght add
+		max.append(maxLength);
+		holder.attr('maxlength', maxLength);
+		//current symbols output
+		holder.on('keypress', function(){
+			cur.text(this.value.length);
 		});
 	});
-	</script>
+</script>
 </body>
 </html>
