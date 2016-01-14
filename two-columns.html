@@ -2,9 +2,27 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Sliding panel</title>
+	<title>Two columns</title>
 	<style>
-
+		.column-wrapper{
+			position: relative;
+			width: 684px;
+			margin: 0 auto;}
+		.fl-left{
+			float: left;}
+		ul{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.left-column,
+		.right-column{
+			border: 1px solid red;
+			padding: 20px;}
+		.middle-column{
+			text-align: center;}
+		.left-column, .right-column, .middle-column{
+			width: 200px;}
 	</style>
 </head>
 <body>
@@ -12,22 +30,34 @@
 	Две колонки, между ними кнопки. Можно отметить пункты в одной колонке и нажав на кнопку переместить в другой, анимация перемещения обязательна
 </p>
 <div class="column-wrapper">
-	<div class="left-column">
-
+	<div class="left-column fl-left">
+		<ul>
+			<li>item 1</li>
+			<li>item 2</li>
+			<li>item 3</li>
+			<li>item 4</li>
+			<li>item 5</li>
+		</ul>
 	</div>
-	<div class="middle-column">
-
+	<div class="middle-column fl-left">
+		<button class="sort-left">move left</button>
+		<button class="sort-right">move right</button>
 	</div>
-	<div class="right-column">
-
+	<div class="right-column fl-left">
+		<ul>
+			<li>item 11</li>
+			<li>item 21</li>
+			<li>item 31</li>
+			<li>item 41</li>
+			<li>item 51</li>
+		</ul>
 	</div>
+	<div style="clear: both;"></div>
 </div>
 <script src="jquery-1.11.2.min.js"></script>
 <script>
 	jQuery(document).ready(function(){
-		var panel = jQuery('.slide-panel'),
-				panelWidth = panel.outerWidth(),
-				panelHeight = panel.outerHeight();
+		var item = jQuery('li');
 		$('.slide-open').click(function(){
 
 		});
