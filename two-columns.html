@@ -13,13 +13,15 @@
 			list-style: none;
 			margin: 0;
 			padding: 0;
+			min
 		}
 		li{
-			cursor: pointer;}
+			cursor: pointer;
+			padding: 0 20px;}
 		.left-column,
 		.right-column{
 			border: 1px solid red;
-			padding: 20px;}
+			padding: 20px 0;}
 		.middle-column{
 			text-align: center;}
 		.left-column, .right-column, .middle-column{
@@ -64,7 +66,8 @@
 			toLeftBtn = jQuery('.sort-left'),
 			toRightBtn = jQuery('.sort-right'),
 			leftColumn = jQuery('.left-column'),
-			rightColumn = jQuery('.right-column');
+			rightColumn = jQuery('.right-column'),
+			timer = 1000;
 		//selecting element
 		item.click(function(){
 			$(this).toggleClass('selected');
@@ -77,17 +80,37 @@
 			var selectedItems = $('.left-column .selected'),
 				columnOffset = rightColumn.offset().left;
 			selectedItems.each(function(){
-				var curOffset = $(this).offset();
-				$(this).css({
+				var $this = $(this),
+					curOffset = $this.offset();
+				$this.css({
 					position: 'relative',
 					left: curOffset.left
 				});
-				$(this).animate({left: columnOffset - curOffset.left}, 1000);
+				$this.animate({left: columnOffset - curOffset.left}, timer);
+				setTimeout(function(){
+					$this.removeClass('selected').removeAttr('style');
+					rightColumn.find('ul').append($this);
+				}, timer);
 			});
 		}
 		//moving right
 		function moveRight(){
-
+			var selectedItems = $('.right-column .selected'),
+				columnOffset = leftColumn.offset().left;
+			selectedItems.each(function(){
+				var $this = $(this),
+					curOffset = $this.offset();
+				$this.css({
+					position: 'relative',
+					left: 0
+				});
+				console.log(columnOffset, curOffset.left);
+				$this.animate({left: columnOffset - curOffset.left}, timer);
+				setTimeout(function(){
+					$this.removeClass('selected').removeAttr('style');
+					leftColumn.find('ul').append($this);
+				}, timer);
+			});
 		}
 	});
 </script>
