@@ -84,7 +84,7 @@
 					curOffset = $this.offset();
 				$this.css({
 					position: 'relative',
-					left: curOffset.left
+					left: 0
 				});
 				$this.animate({left: columnOffset - curOffset.left}, timer);
 				setTimeout(function(){
@@ -104,7 +104,6 @@
 					position: 'relative',
 					left: 0
 				});
-				console.log(columnOffset, curOffset.left);
 				$this.animate({left: columnOffset - curOffset.left}, timer);
 				setTimeout(function(){
 					$this.removeClass('selected').removeAttr('style');
