@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>hover</title>
+	<style>
+		.column-wrapper{
+			max-width: 684px;
+			margin: 0 auto;}
+		.list-menu{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.list-menu-wrapper{
+			position: relative;
+			background: grey;
+		}
+		.list-item{
+			float: left;
+			padding: 15px;}
+		.list-link{
+			color: #fff;
+		}
+		.list-menu{
+			position: relative;
+			overflow: hidden;
+			z-index: 2;
+		}
+		.lamp-layer{
+			position: absolute;
+			height: 48px;
+			width: 111px;
+			background: green;
+			z-index: 1;
+			left: 0;
+			top: 0;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Lavalamp эффект перетекающего ховера в горизонтальной навигации
+</p>
+<div class="column-wrapper">
+	<div class="list-menu-wrapper">
+		<ul class="list-menu">
+			<li class="list-item"><a href="#" class="list-link">Menu item 1</a></li>
+			<li class="list-item"><a href="#" class="list-link">Menu item 2</a></li>
+			<li class="list-item"><a href="#" class="list-link">Menu item 3</a></li>
+			<li class="list-item"><a href="#" class="list-link">Menu item 4</a></li>
+			<li class="list-item"><a href="#" class="list-link">Menu item 5</a></li>
+		</ul>
+		<div class="lamp-layer"></div>
+	</div>
+</div>
+<script src="jquery-1.11.2.min.js"></script>
+<script>
+	// page init
+	jQuery(function(){
+		initHover();
+	});
+	function initHover(){
+		jQuery('.list-item').hover(function(){
+			var leftHover = Math.round(jQuery(this).offset().left - jQuery('.list-menu-wrapper').offset().left),
+				widthHover = jQuery(this).outerWidth();
+			jQuery('.lamp-layer').stop(true, true).animate({'left': leftHover, 'width': widthHover}, 600);
+		});
+	}
+</script>
+</body>
+</html>
