@@ -17,7 +17,7 @@
 		<strong>current:</strong><span class="cur"></span>
 		<strong>max:</strong><span class="max"></span>
 	</div>
-	<textarea name="" id="text-holder" cols="30" rows="10"></textarea>
+	<textarea name="" id="text-holder" cols="30" rows="10">hdgfshasjgfhjdasgdfhjas</textarea>
 </div>
 <script src="jquery-1.11.2.min.js"></script>
 <script>
@@ -25,14 +25,39 @@
 		var maxLength = prompt('Enter textarea max length'),
 			cur = jQuery('.cur'),
 			max = jQuery('.max'),
-			holder = jQuery('#text-holder');
+			holder = jQuery('#text-holder'),
+			checkInterval;
+
 		//max lenght add
 		max.append(maxLength);
 		holder.attr('maxlength', maxLength);
+
+		//check symbols on start
+		countCharacters();
+
 		//current symbols output
-		holder.on('keypress', function(){
-			cur.text(this.value.length);
+		holder.focus(function(){
+			checkInterval = setInterval(countCharacters, 100);
 		});
+		holder.blur(function(){
+			clearInterval ( checkInterval );
+			countCharacters();
+		});
+
+		//check length
+		function countCharacters(){
+			var sum = holder.val().length;
+
+			//check symbols count if we have default
+			if(sum > maxLength){
+				var text = holder.text().substr(0, parseInt(maxLength));
+				holder.text(text);
+				sum = holder.val().length;
+			}
+
+			//output current sum
+			cur.text(sum);
+		}
 	});
 </script>
 </body>

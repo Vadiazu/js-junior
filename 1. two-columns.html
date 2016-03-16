@@ -44,8 +44,8 @@
 		</ul>
 	</div>
 	<div class="middle-column fl-left">
-		<button class="sort-left">move left</button>
-		<button class="sort-right">move right</button>
+		<a href="#" class="sort-left">move left</a>
+		<a href="#" class="sort-right">move right</a>
 	</div>
 	<div class="right-column fl-left">
 		<ul>
@@ -60,54 +60,38 @@
 </div>
 <script src="jquery-1.11.2.min.js"></script>
 <script>
-	jQuery(document).ready(function(){
-		var item = jQuery('li'),
-			toLeftBtn = jQuery('.sort-left'),
-			toRightBtn = jQuery('.sort-right'),
-			leftColumn = jQuery('.left-column'),
-			rightColumn = jQuery('.right-column'),
+	$(document).ready(function(){
+		var item = $('li'),
+			toLeftBtn = $('.sort-left'),
+			toRightBtn = $('.sort-right'),
+			leftColumn = $('.left-column'),
+			rightColumn = $('.right-column'),
 			timer = 1000;
+
 		//selecting element
 		item.click(function(){
 			$(this).toggleClass('selected');
 		});
+
 		//init moving
-		toLeftBtn.on('click', moveLeft);
-		toRightBtn.on('click', moveRight);
+		toLeftBtn.click(moveItem(leftColumn));
+		toRightBtn.click(moveItem(rightColumn));
+
 		//moving left
-		function moveLeft(){
-			var selectedItems = $('.left-column .selected'),
-				columnOffset = rightColumn.offset().left;
+		function moveItem(direction){
+			var selectedItems = direction.find('.selected'),
+				columnOffset = direction.offset().left;
 			selectedItems.each(function(){
-				var $this = $(this),
-					curOffset = $this.offset();
-				$this.css({
+				var items = $(this),
+					curOffset = items.offset();
+				items.css({
 					position: 'relative',
 					left: 0
 				});
-				$this.animate({left: columnOffset - curOffset.left}, timer);
-				setTimeout(function(){
-					$this.removeClass('selected').removeAttr('style');
-					rightColumn.find('ul').append($this);
-				}, timer);
-			});
-		}
-		//moving right
-		function moveRight(){
-			var selectedItems = $('.right-column .selected'),
-				columnOffset = leftColumn.offset().left;
-			selectedItems.each(function(){
-				var $this = $(this),
-					curOffset = $this.offset();
-				$this.css({
-					position: 'relative',
-					left: 0
+				items.animate({left: columnOffset - curOffset.left}, timer, function(){
+					items.removeClass('selected').removeAttr('style');
+					rightColumn.find('ul').append(items);
 				});
-				$this.animate({left: columnOffset - curOffset.left}, timer);
-				setTimeout(function(){
-					$this.removeClass('selected').removeAttr('style');
-					leftColumn.find('ul').append($this);
-				}, timer);
 			});
 		}
 	});
