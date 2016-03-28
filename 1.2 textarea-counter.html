@@ -19,7 +19,7 @@
 	</div>
 	<textarea name="" id="text-holder" cols="30" rows="10">hdgfshasjgfhjdasgdfhjas</textarea>
 </div>
-<script src="jquery-1.11.2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
 	jQuery(document).ready(function(){
 		var maxLength = prompt('Enter textarea max length'),
@@ -48,7 +48,7 @@
 		function countCharacters(){
 			var sum = holder.val().length;
 
-			//check symbols count if we have default
+			//check symbols count if we have default also will work for old browsers that doesn't support maxLength
 			if(sum > maxLength){
 				var text = holder.text().substr(0, parseInt(maxLength));
 				holder.text(text);
