@@ -13,14 +13,18 @@
 			list-style: none;
 			margin: 0;
 			padding: 0;
+			box-sizing: border-box;
 		}
 		li{
 			cursor: pointer;
-			padding: 0 20px;}
+			padding: 0 20px;
+			height: 30px;
+			line-height: 30px;
+			box-sizing: border-box;}
 		.left-column,
 		.right-column{
 			border: 1px solid red;
-			padding: 20px 0;}
+			box-sizing: border-box;}
 		.middle-column{
 			text-align: center;}
 		.left-column, .right-column, .middle-column{
@@ -69,30 +73,66 @@
 			timer = 1000;
 
 		//selecting element
-		item.click(function(){
+		item.on('click', function(){
 			$(this).toggleClass('selected');
 		});
 
 		//init moving
-		toLeftBtn.click(moveItem(leftColumn));
-		toRightBtn.click(moveItem(rightColumn));
+		toLeftBtn.on('click', function(){moveItem(rightColumn, leftColumn)});
+		toRightBtn.on('click', function(){moveItem(leftColumn, rightColumn)});
 
 		//moving left
-		function moveItem(direction){
-			var selectedItems = direction.find('.selected'),
-				columnOffset = direction.offset().left;
+		function moveItem(source, destination){
+			var selectedItems = source.find('.selected'),
+				sourceCurrentHeight = source.outerHeight(),
+				destinationCurrentHeight = destination.outerHeight(),
+				sourceOffsetLeft = source.offset().left + 1,
+				sourceOffsetTop = destination.offset().top + 1,
+				destinationOffsetLeft = destination.offset().left + 1,
+				destinationOffsetTop = destination.offset().top + 1,
+				itemsHeight = 0;
+
+			//setting up columns height before transition
+			source.css('height', sourceCurrentHeight);
+			destination.css('height', destinationCurrentHeight);
+
+			//going through selected items
 			selectedItems.each(function(){
-				var items = $(this),
-					curOffset = items.offset();
-				items.css({
-					position: 'relative',
-					left: 0
+				var item = $(this),
+					itemOffsetTop,
+					itemHeight = item.outerHeight(),
+					itemWidth = item.outerWidth(),
+					index = item.index();
+
+				//calculating top offset for current item
+				index > 0 ? itemOffsetTop = sourceOffsetTop + itemHeight * index : itemOffsetTop = sourceOffsetTop;
+
+				//adding styles for animation start
+				item.css({
+					width: itemWidth,
+					position: 'absolute',
+					left: sourceOffsetLeft + 1,
+					top: itemOffsetTop
 				});
-				items.animate({left: columnOffset - curOffset.left}, timer, function(){
-					items.removeClass('selected').removeAttr('style');
-					rightColumn.find('ul').append(items);
+
+				//moving item from one list to another
+				item.animate({
+					left: destinationOffsetLeft,
+					top: destinationOffsetTop + destinationCurrentHeight
+				}, timer, function(){
+					item.removeClass('selected').removeAttr('style');
+					destination.find('ul').append(item);
 				});
+
+				//calculating columns height after move
+				sourceCurrentHeight = sourceCurrentHeight - parseInt(itemHeight);
+				destinationCurrentHeight = destinationCurrentHeight + parseInt(itemHeight);
+
 			});
+
+			//animating columns height
+			source.animate({height: sourceCurrentHeight}, timer/2);
+			destination.animate({height: destinationCurrentHeight}, timer/2);
 		}
 	});
 </script>
