@@ -6,15 +6,35 @@
 	<title>hover</title>
 	<style>
 		.column-wrapper{
-			max-width: 684px;
+			max-width: 900px;
 			margin: 0 auto;}
 		.fl-left{
 			float: left;}
+		.items-row{
+			overflow: hidden;
+		}
 		.item-wrapper{
 			width: 200px;
 			margin-bottom: 50px;
 			position: relative;
-
+			height: 200px;
+			background: #000;
+			overflow: hidden;
+			margin-right: 30px;
+		}
+		.zoom-wrapper{
+			width: 400px;
+			height: 200px;
+			position: relative;
+			overflow: hidden;
+		}
+		.zoom-wrapper img{
+			position: absolute;
+		}
+		.zoomed-img{
+			z-index: 1;
+			left: 100%;
+			top: 100%;
 		}
 		.content-slide{
 			z-index: 1;
@@ -23,25 +43,10 @@
 			right: 0;
 			top: 100%;
 			height: 200px;
-			background: grey;
-			display: none;
-		}
-		.content-slide.zoom{
-			display: block;
-			left: 100px;
-			right: -100px;
-			-webkit-transition: all .6s ease-in-out;
-			-moz-transition: all .6s ease-in-out;
-			-o-transition: all .6s ease-in-out;
-			-ms-transition: all .6s ease-in-out;
-			z-index: 0;
-			background: green;
-		}
-		.content-slide.zoom.transition{
-			-webkit-transform: scale(1.3);
-			-moz-transform: scale(1.3);
-			-o-transform: scale(1.3);
-			transform: scale(1.3);
+			line-height: 200px;
+			color: #ffffff;
+			text-align: center;
+			font-size: 30px;
 		}
 	</style>
 </head>
@@ -50,73 +55,182 @@
 	Плавный slide/fade/zoom ховер на элементы (с поддержкой мобильных устройств)
 </p>
 <div class="column-wrapper">
-	<div class="item-wrapper">
-		<a href="#" class="hover-item" data-effect="slide">hover me</a>
-		<div class="content-slide"></div>
+	<div class="items-row">
+		<div class="item-wrapper fl-left" data-effect="slide">
+			<div class="content-slide">
+				<div class="content-wrapper">slide effect</div>
+			</div>
+		</div>
+		<div class="item-wrapper fl-left" data-effect="slide">
+			<div class="content-slide">
+				<div class="content-wrapper">slide effect</div>
+			</div>
+		</div>
+		<div class="item-wrapper fl-left" data-effect="slide">
+			<div class="content-slide">
+				<div class="content-wrapper">slide effect</div>
+			</div>
+		</div>
 	</div>
-	<div class="item-wrapper">
-		<a href="#" class="hover-item" data-effect="fade">hover me</a>
-		<div class="content-slide"></div>
+
+	<div class="items-row">
+		<div class="item-wrapper fl-left" data-effect="fade">
+			<div class="content-slide">
+				<div class="content-wrapper">fade effect</div>
+			</div>
+		</div>
+		<div class="item-wrapper fl-left" data-effect="fade">
+			<div class="content-slide">
+				<div class="content-wrapper">fade effect</div>
+			</div>
+		</div>
+		<div class="item-wrapper fl-left" data-effect="fade">
+			<div class="content-slide">
+				<div class="content-wrapper">fade effect</div>
+			</div>
+		</div>
 	</div>
-	<div class="item-wrapper">
-		<a href="#" class="hover-item" data-effect="zoom">hover me</a>
-		<div class="content-slide zoom"></div>
+
+	<div class="zoom-wrapper">
+		<img class="default-img" src="zoom-small.jpg" alt="">
+		<img class="zoomed-img" src="zoom-big.jpg" alt="">
 	</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
 	// page init
-	jQuery(function(){
+	$(function(){
 		initHover();
 	});
-	function initHover(){
-		var isMobile = false, showEffect;
+
+	$(window).on('load', function(){
+		initZoom();
+	});
+
+	function initZoom(){
+		var wrapper = $('.zoom-wrapper'),
+			defaultImg = wrapper.find('img.default-img'),
+			defaultImgWidth = defaultImg.width(),
+			defaultImgHeight = defaultImg.height(),
+			zoomImg = wrapper.find('img.zoomed-img'),
+			zoomImgWidth = zoomImg.width(),
+			zoomImgHeight = zoomImg.height(),
+			isMobile = false;
+
+		//checking for mobile devices
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			isMobile = true;
 		}
-		jQuery('.hover-item').click(function(e){
-			e.preventDefault();
-		});
+
+		//firing element show on click for mobile and on hover for desktop
 		if(isMobile){
-			jQuery('.hover-item').click(function(){
-				var thisElem = jQuery(this);
-				if(thisElem.hasClass('opened')){
-					hideElement(thisElem);
-				} else{
-					showElement(thisElem);
+			wrapper.on({
+				touchstart: function(e){
+					e.preventDefault();
+				},
+				touchend: function(){
+					hideZoomImage();
+				},
+				touchmove: function(e){
+					imageZoom('touch', e);
 				}
-				thisElem.toggleClass('opened');
 			});
 		} else{
-			jQuery('.hover-item').mouseenter(function(){
-				showElement(jQuery(this));
-			}).mouseleave(function(){
-				hideElement(jQuery(this));
+			//setting up events
+			wrapper.on({
+				mouseout: function(){
+					hideZoomImage();
+				},
+				mousemove: function(e){
+					imageZoom('mouse', e);
+				}
 			});
 		}
-		function showElement(element){
-			var slideitem = element.parent().find('.content-slide');
-			showEffect = element.data('effect');
-			if(showEffect == 'slide'){
-				slideitem.slideDown(400);
+
+		function hideZoomImage(){
+			//showing default image
+			zoomImg.removeAttr('style');
+		}
+
+		function imageZoom(eventType, e){
+			//calculating Desktop coordinates
+			if(eventType == 'mouse'){
+				var mouseX = event.pageX - wrapper.offset().left,
+					mouseY = event.pageY - wrapper.offset().top,
+					gotoX = (Math.round((mouseX / defaultImgWidth) * 100) / 100) * (zoomImgWidth - defaultImgWidth),
+					gotoY = (Math.round((mouseY / defaultImgHeight) * 100) / 100) * (zoomImgHeight - defaultImgHeight);
 			}
-			if(showEffect == 'fade'){
-				slideitem.fadeIn(400);
+
+			//calculating Mobile coordinates
+			if(eventType == 'touch'){
+				var mouseX = e.originalEvent.touches[0].pageX - wrapper.offset().left,
+					mouseY = e.originalEvent.touches[0].pageY - wrapper.offset().top,
+					gotoX = (Math.round((mouseX / defaultImgWidth) * 100) / 100) * (zoomImgWidth - defaultImgWidth),
+					gotoY = (Math.round((mouseY / defaultImgHeight) * 100) / 100) * (zoomImgHeight - defaultImgHeight);
 			}
-			if(showEffect == 'zoom'){
-				slideitem.addClass('transition');
+
+			//attaching new coordinates for image
+			if(mouseX > 0 && mouseY > 0 && mouseX < defaultImgWidth && mouseY < defaultImgHeight){
+				zoomImg.css({ left: -gotoX, top: -gotoY });
 			}
 		}
-		function hideElement(element){
-			var slideitem = element.parent().find('.content-slide');
+	}
+
+	function initHover(){
+		var isMobile = false, timer = 400, showEffect;
+
+		//checking for mobile devices
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			isMobile = true;
+		}
+
+		//firing element show on click for mobile and on hover for desktop
+		if(isMobile){
+			$('.item-wrapper').on('click', function(){
+				if($(this).hasClass('opened')){
+					hideElement($(this));
+				} else{
+					showElement($(this));
+				}
+				$(this).toggleClass('opened');
+			});
+		} else{
+			$('.item-wrapper').on({
+				mouseenter: function(){
+				showElement($(this));
+			},
+				mouseleave: function(){
+				hideElement($(this));
+			}});
+		}
+
+		//show element
+		function showElement(element){
+			var slideItem = element.find('.content-slide');
+			showEffect = element.data('effect');
 			if(showEffect == 'slide'){
-				slideitem.slideUp(400);
+				slideItem.animate({top: 0}, timer);
 			}
 			if(showEffect == 'fade'){
-				slideitem.fadeOut(400);
+				slideItem.css({
+					opacity: 0,
+					top: 0
+				});
+				slideItem.animate({opacity: 1}, timer);
 			}
-			if(showEffect == 'zoom'){
-				slideitem.removeClass('transition');
+		}
+
+		//hide element
+		function hideElement(element){
+			var slideItem = element.find('.content-slide');
+			if(showEffect == 'slide'){
+				slideItem.animate({top: '100%'}, timer);
+			}
+			if(showEffect == 'fade'){
+				slideItem.animate({opacity: 0}, timer);
+				setTimeout(function(){
+					slideItem.removeAttr('style');
+				}, timer);
 			}
 		}
 	}
