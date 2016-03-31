@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>sorting</title>
+	<style>
+		.column-wrapper{
+			max-width: 684px;
+			margin: 0 auto;}
+		.sorting-list{
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			float: left;
+			width: 200px;
+		}
+		.btn-wrapper{
+			float: left;
+			margin-left: 20px;
+		}
+		.list-menu-wrapper{
+			position: relative;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Сортировка текстового списка по содержимому (две кнопки сортировки asc и desc)
+</p>
+<div class="column-wrapper">
+	<div class="list-menu-wrapper">
+		<ul class="sorting-list">
+			<li>Alabama</li>
+			<li>Alaska</li>
+			<li>Arizona</li>
+			<li>Arkansas</li>
+			<li>California</li>
+			<li>Colorado</li>
+			<li>Connecticut</li>
+			<li>Delaware</li>
+			<li>Florida</li>
+			<li>Georgia</li>
+			<li>Hawaii</li>
+			<li>Idaho</li>
+			<li>Illinois</li>
+			<li>Indiana</li>
+			<li>Iowa</li>
+			<li>Kansas</li>
+			<li>Kentucky</li>
+			<li>Louisiana</li>
+			<li>Maine</li>
+			<li>Maryland</li>
+			<li>Massachusetts</li>
+			<li>Michigan</li>
+			<li>Minnesota</li>
+			<li>Mississippi</li>
+			<li>Missouri</li>
+			<li>Montana</li>
+			<li>Nebraska</li>
+			<li>Nevada</li>
+			<li>New Hampshire</li>
+			<li>New Jersey</li>
+			<li>New Mexico</li>
+			<li>New York</li>
+			<li>North Carolina</li>
+			<li>North Dakota</li>
+			<li>Ohio</li>
+			<li>Oklahoma</li>
+			<li>Oregon</li>
+			<li>Pennsylvania</li>
+			<li>Rhode Island</li>
+			<li>South Carolina</li>
+			<li>South Dakota</li>
+			<li>Tennessee</li>
+			<li>Texas</li>
+			<li>Utah</li>
+			<li>Vermont</li>
+			<li>Virginia</li>
+			<li>Washington</li>
+			<li>West Virginia</li>
+			<li>Wisconsin</li>
+			<li>Wyoming</li>
+			<li>District of Columbia</li>
+			<li>Puerto Rico</li>
+			<li>Guam</li>
+			<li>American Samoa</li>
+			<li>U.S. Virgin Islands</li>
+			<li>Northern Mariana Islands</li>
+		</ul>
+		<div class="btn-wrapper">
+			<button class="asc">asc</button>
+			<button class="desc">desc</button>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		initSorting();
+	});
+	function initSorting(){
+		var list = $('.sorting-list'),
+			listItems = list.find('li'),
+			itemsArray = [],
+			asc = $('.asc'),
+			desc = $('.desc');
+
+		//creating array that contains all text list
+		for(var i=0; i < listItems.length; i++){
+			itemsArray.push(listItems[i].innerHTML);
+		}
+
+		//asc sorting
+		asc.on('click', function(){
+			itemsArray.sort();
+
+			for(var j=0; j < listItems.length; j++){
+				listItems[j].innerHTML = itemsArray[j];
+			}
+		});
+
+		//desc sorting
+		desc.on('click', function(){
+			itemsArray.sort();
+			itemsArray.reverse();
+
+			for(var j=0; j < listItems.length; j++){
+				listItems[j].innerHTML = itemsArray[j];
+			}
+		});
+	}
+</script>
+</body>
+</html>

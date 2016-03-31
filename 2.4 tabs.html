@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>tabs</title>
+	<style>
+		.tabs-wrapper{
+			max-width: 684px;
+			margin: 0 auto 40px;}
+		.tabs-list{
+			list-style: none;
+			margin: 0 0 -1px;
+			padding: 0;
+			overflow: hidden;
+		}
+		.tabs-list li{
+			float: left;
+		}
+		.tabs-list a{
+			display: block;
+			padding: 10px 20px;
+			margin-right: 15px;
+			border: 1px solid grey;
+			text-decoration: none;
+		}
+		.tabs-list a.active{
+			background: grey;
+			color: #ffffff;
+		}
+		.tabs-content{
+			min-height: 80px;
+			border: 1px solid grey;
+			padding: 15px;
+		}
+		.tab{
+			display: none;
+		}
+		.tab.active{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Табы из ссылок/селекта/радио/чекбоксов
+</p>
+<div class="column-wrapper">
+	<div class="tabs-wrapper link-tabs">
+		<ul class="tabs-list">
+			<li><a class="active" href="#first">First tab</a></li>
+			<li><a href="#second">Second tab</a></li>
+			<li><a href="#third">Third tab</a></li>
+			<li><a href="#fourth">Fourth tab</a></li>
+		</ul>
+		<div class="tabs-content">
+			<div id="first" class="tab active">First tab</div>
+			<div id="second" class="tab">Second tab</div>
+			<div id="third" class="tab">Third tab</div>
+			<div id="fourth" class="tab">Fourth tab</div>
+		</div>
+	</div>
+
+	<div class="tabs-wrapper select-tabs">
+		<select name="" id="" class="tabs-select">
+			<option value="select-first">First tab</option>
+			<option value="select-second">Second tab</option>
+			<option value="select-third">Third tab</option>
+			<option value="select-fourth">Fourth tab</option>
+		</select>
+		<div class="tabs-content">
+			<div id="select-first" class="tab active">First tab</div>
+			<div id="select-second" class="tab">Second tab</div>
+			<div id="select-third" class="tab">Third tab</div>
+			<div id="select-fourth" class="tab">Fourth tab</div>
+		</div>
+	</div>
+
+	<div class="tabs-wrapper radio-tabs">
+		<label for="radio-1">
+			<input id="radio-1" type="radio" name="radio-tab" value="radio-first" checked> first tab
+		</label>
+		<label for="radio-2">
+			<input id="radio-2" type="radio" name="radio-tab" value="radio-second"> second tab
+		</label>
+		<label for="radio-3">
+			<input id="radio-3" type="radio" name="radio-tab" value="radio-third"> third tab
+		</label>
+		<label for="radio-4">
+			<input id="radio-4" type="radio" name="radio-tab" value="radio-fourth"> fourth tab
+		</label>
+		<div class="tabs-content">
+			<div id="radio-first" class="tab active">First tab</div>
+			<div id="radio-second" class="tab">Second tab</div>
+			<div id="radio-third" class="tab">Third tab</div>
+			<div id="radio-fourth" class="tab">Fourth tab</div>
+		</div>
+	</div>
+
+	<div class="tabs-wrapper checkbox-tabs">
+		<label for="checkbox-1">
+			<input id="checkbox-1" type="checkbox" name="radio-tab" value="checkbox-first" checked> first tab
+		</label>
+		<label for="checkbox-2">
+			<input id="checkbox-2" type="checkbox" name="radio-tab" value="checkbox-second"> second tab
+		</label>
+		<label for="checkbox-3">
+			<input id="checkbox-3" type="checkbox" name="radio-tab" value="checkbox-third"> third tab
+		</label>
+		<label for="checkbox-4">
+			<input id="checkbox-4" type="checkbox" name="radio-tab" value="checkbox-fourth"> fourth tab
+		</label>
+		<div class="tabs-content">
+			<div id="checkbox-first" class="tab active">First tab</div>
+			<div id="checkbox-second" class="tab">Second tab</div>
+			<div id="checkbox-third" class="tab">Third tab</div>
+			<div id="checkbox-fourth" class="tab">Fourth tab</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		initTabs();
+		initSelect();
+		initRadio();
+		initCheckbox();
+	});
+
+	function initTabs(){
+		var tabsLink = $('.tabs-list a'),
+			tabsContainer = $('.link-tabs .tabs-content .tab');
+
+		tabsLink.on('click', function(e){
+			e.preventDefault();
+
+			var item = $(this),
+				id = item.attr('href');
+
+			if(!item.hasClass('active')){
+				tabsLink.removeClass('active');
+				tabsContainer.removeClass('active');
+
+				item.addClass('active');
+				$(id).addClass('active');
+			}
+
+		});
+	}
+
+	function initSelect(){
+		var linkHolder = $('.tabs-select'),
+			tabsContainer = $('.select-tabs .tabs-content .tab');
+
+		linkHolder.on('change', function(){
+			var id = linkHolder.val();
+
+			tabsContainer.removeClass('active');
+			$('#' + id).addClass('active');
+		});
+	}
+
+	function initRadio(){
+		var linkHolder = $('.radio-tabs input[type="radio"]'),
+			tabsContainer = $('.radio-tabs .tabs-content .tab');
+
+		linkHolder.on('change', function(){
+			var id = $(this).val();
+
+			tabsContainer.removeClass('active');
+			$('#' + id).addClass('active');
+		});
+	}
+
+	function initCheckbox(){
+		var linkHolder = $('.checkbox-tabs input[type="checkbox"]'),
+			tabsContainer = $('.checkbox-tabs .tabs-content .tab');
+
+//		linkHolder.on('change', function(){
+//			var item = $(this),
+//				id = item.val();
+//
+//			if(item.is(":checked")){
+//				tabsContainer.removeClass('active');
+//				$('#' + id).addClass('active');
+//			} else {
+//				tabsContainer.removeClass('active');
+//			}
+//
+//		});
+		linkHolder.on('change', function(){
+			var item = $(this),
+				id = item.val();
+
+			if(item.is(":checked")){
+				linkHolder.not()
+				tabsContainer.removeClass('active');
+				$('#' + id).addClass('active');
+			} else {
+				tabsContainer.removeClass('active');
+			}
+
+		});
+	}
+
+</script>
+</body>
+</html>

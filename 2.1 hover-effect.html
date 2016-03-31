@@ -153,21 +153,23 @@
 		}
 
 		function imageZoom(eventType, e){
+			var mouseX,mouseY;
+
 			//calculating Desktop coordinates
 			if(eventType == 'mouse'){
-				var mouseX = event.pageX - wrapper.offset().left,
-					mouseY = event.pageY - wrapper.offset().top,
-					gotoX = (Math.round((mouseX / defaultImgWidth) * 100) / 100) * (zoomImgWidth - defaultImgWidth),
-					gotoY = (Math.round((mouseY / defaultImgHeight) * 100) / 100) * (zoomImgHeight - defaultImgHeight);
+				mouseX = event.pageX - wrapper.offset().left;
+				mouseY = event.pageY - wrapper.offset().top;
 			}
 
 			//calculating Mobile coordinates
 			if(eventType == 'touch'){
-				var mouseX = e.originalEvent.touches[0].pageX - wrapper.offset().left,
-					mouseY = e.originalEvent.touches[0].pageY - wrapper.offset().top,
-					gotoX = (Math.round((mouseX / defaultImgWidth) * 100) / 100) * (zoomImgWidth - defaultImgWidth),
-					gotoY = (Math.round((mouseY / defaultImgHeight) * 100) / 100) * (zoomImgHeight - defaultImgHeight);
+				mouseX = e.originalEvent.touches[0].pageX - wrapper.offset().left;
+				mouseY = e.originalEvent.touches[0].pageY - wrapper.offset().top;
 			}
+
+			//calculating zoomed image coordinates
+			var gotoX = (Math.round((mouseX / defaultImgWidth) * 100) / 100) * (zoomImgWidth - defaultImgWidth),
+				gotoY = (Math.round((mouseY / defaultImgHeight) * 100) / 100) * (zoomImgHeight - defaultImgHeight);
 
 			//attaching new coordinates for image
 			if(mouseX > 0 && mouseY > 0 && mouseX < defaultImgWidth && mouseY < defaultImgHeight){
