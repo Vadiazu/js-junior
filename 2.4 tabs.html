@@ -177,28 +177,14 @@
 		var linkHolder = $('.checkbox-tabs input[type="checkbox"]'),
 			tabsContainer = $('.checkbox-tabs .tabs-content .tab');
 
-//		linkHolder.on('change', function(){
-//			var item = $(this),
-//				id = item.val();
-//
-//			if(item.is(":checked")){
-//				tabsContainer.removeClass('active');
-//				$('#' + id).addClass('active');
-//			} else {
-//				tabsContainer.removeClass('active');
-//			}
-//
-//		});
 		linkHolder.on('change', function(){
 			var item = $(this),
 				id = item.val();
 
 			if(item.is(":checked")){
-				linkHolder.not()
-				tabsContainer.removeClass('active');
 				$('#' + id).addClass('active');
 			} else {
-				tabsContainer.removeClass('active');
+				$('#' + id).removeClass('active');
 			}
 
 		});

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>water circles</title>
+	<style>
+		html, body{
+			box-sizing: border-box;}
+		.pop-up{
+			position: absolute;
+			border-radius: 10px;
+			background: white;
+			box-shadow: 0 0 10px -2px rgba(0,0,0,.5);
+			left: 50%;
+			top: 50%}
+		.hidden{
+			left: -9999px!important;
+			top: -9999px!important;
+		}
+		.pop-up-wrapper{
+			display: none;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			background: rgba(0,0,0,.6);
+		}
+	</style>
+</head>
+<body>
+<p>
+	Попап по клику (с возможностью закрытия при клике снаружи)
+</p>
+<a class="pop-up-open" href="#pop-up">open pop up</a>
+<div id="pop-up" class="pop-up hidden"><div style="width: 200px;height: 200px;padding: 30px;">This is pop up</div></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		initPop();
+	});
+
+	function initPop(){
+		var openLink = $('.pop-up-open'),
+			popUp = $('.pop-up'),
+			parent = $('body'),
+			popWrapper = $('<div class="pop-up-wrapper"></div>');
+
+		//stop bubbling on pop up click to close it pn outside click
+		popUp.on('click', function(e){
+			e.stopPropagation();
+		});
+
+		//opening pop up
+		openLink.on('click', function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			var leftPos = popUp.outerWidth() / 2,
+				topPos = popUp.outerHeight() / 2;
+
+			parent.append(popWrapper);
+			popWrapper.append(popUp);
+			popUp.css({
+				'margin-left': -leftPos,
+				'margin-top': -topPos
+			}).removeClass('hidden');
+
+			popWrapper.show();
+		});
+
+		//close pop up on outer click
+		parent.on('click', function(){
+			popUp.unwrap(popWrapper).addClass('hidden');
+		});
+	}
+
+</script>
+</body>
+</html>
