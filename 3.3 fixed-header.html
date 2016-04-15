@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>pop up</title>
+	<style>
+		html, body{
+			box-sizing: border-box;}
+		body{
+			height: 2000px;
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		.sticky-header{
+			padding: 0 20px;
+			border-bottom: 2px solid #444;
+			height: 80px;
+			background: #ffffff;
+			-webkit-transform: translateZ(0);
+		}
+		.sticky-header.fixed{
+			position: fixed;
+			top: 0;
+			right: 0;
+			left: 0;
+		}
+		.sticky-header a{
+			margin: 0 10px;
+		}
+		.menu{
+			padding: 10px 0;
+		}
+		p{
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+<header class="sticky-header">
+	<div class="menu">
+		<a href="#">Some link 1</a><a href="#">Some link 2</a><a href="#">Some link 3</a><a href="#">Some link 4</a>
+	</div>
+</header>
+<p>
+	Фиксирование header блока после скролла на определенную величину c эффектом уменьшения при переходе в фиксированное состояние
+</p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		initSticky();
+	});
+
+	function initSticky(){
+		var sticky = $('.sticky-header'),
+			stickyHeight = sticky.outerHeight(),
+			stickyHeightAnimated = $('.menu').outerHeight(),
+			stickyStart = 1,
+			body = $('body'),
+			timer = 500;
+
+		$(window).scroll(function(){
+			if($(this).scrollTop() > stickyStart){
+				sticky.addClass('fixed').animate({height: stickyHeightAnimated}, timer);
+				body.animate({'padding-top': stickyHeight}, timer);
+			} else{
+				sticky.stop( true, true ).css({height: stickyHeight}).removeClass('fixed');
+				body.stop( true, true ).css({'padding-top': 0});
+			}
+		}).trigger('scroll');
+	}
+
+</script>
+</body>
+</html>
