@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>full screen preloader</title>
+	<style>
+		html, body{
+			box-sizing: border-box;}
+		body{
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		.loading{
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		p{
+			margin: 0;
+		}
+		img{
+			max-width: 100%;
+			display: block;
+			height: auto;
+		}
+		.preloader{
+			position: fixed;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom:0;
+			background: #000;
+		}
+		.text{
+			position: absolute;
+			height: 30px;
+			font-size: 24px;
+			line-height: 30px;
+			top: 50%;
+			left: 0;
+			right: 0;
+			margin: -15px auto 0;
+			color: #fff;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Реализовать fullscreen preloader для любой веб-страницы (дождаться загрузки изображений и т.п., реализовать процентную шкалу)
+</p>
+<div class="image-wrapper">
+	<img src="http://lorempixel.com/1400/1200/sports/1">
+	<img src="http://lorempixel.com/1400/1200/sports/2">
+	<img src="http://lorempixel.com/1400/1200/sports/3">
+	<img src="http://lorempixel.com/1400/1200/sports/4">
+	<img src="http://lorempixel.com/1400/1200/sports/5">
+	<img src="http://lorempixel.com/1400/1200/sports/6">
+	<img src="http://lorempixel.com/1400/1200/sports/7">
+	<img src="http://lorempixel.com/1400/1200/sports/8">
+	<img src="http://lorempixel.com/1400/1200/sports/9">
+	<img src="http://lorempixel.com/1400/1200/sports/10">
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		fullScreenPreloader();
+	});
+
+	function fullScreenPreloader() {
+		var preloader = $('<div class="preloader"><div class="text">Loading <span class="percentage">0</span></div></div>'),
+			preloaderHolder = $('body'),
+			content = $('img'),
+			percentCounter = 0;
+
+		//adding preloader to body
+		preloaderHolder.addClass('loading').append(preloader);
+
+		//imitation of preloader with image load
+		content.each(function(index) {
+			$(this).load(function() {
+				percentCounter = (index / content.length) * 100;
+				$('.percentage').text(percentCounter + '%');
+			});
+		});
+
+		//removing preloader after content load
+		$(window).on('load', function lazyLoadHandler() {
+			preloaderHolder.removeClass('loading');
+			preloader.remove();
+		});
+	}
+
+</script>
+</body>
+</html>
