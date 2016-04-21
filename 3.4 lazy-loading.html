@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>lazy loading</title>
+	<style>
+		html, body{
+			box-sizing: border-box;}
+		body{
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		p{
+			margin: 0;
+		}
+		img{
+			max-width: 100%;
+			display: block;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Загрузка изображений в момент подскролливания к ним и отображение их с эффектом (самодельный image lazy loading)
+</p>
+<div class="image-wrapper">
+	<img src="img/blank.gif" data-src="img/banner-jamaica.jpg" alt="" data-width="1300" data-height="478">
+	<img src="img/blank.gif" data-src="img/home-slide-1.jpg" alt="" data-width="730" data-height="451">
+	<img src="img/blank.gif" data-src="img/home-slide-2.jpg" alt="" data-width="730" data-height="451">
+	<img src="img/blank.gif" data-src="img/map-sample.jpg" alt="" data-width="719" data-height="498">
+	<img src="img/blank.gif" data-src="img/single-page-slider-2.jpg" data-width="1500" data-height="846">
+	<img src="img/blank.gif" data-src="img/single-page-slider-3.jpg" data-width="1920" data-height="1080">
+	<img src="img/blank.gif" data-src="img/single-page-slider-4.jpg" data-width="1229" data-height="822">
+	<img src="img/blank.gif" data-src="img/single-page-slider-5.jpg" data-width="1200" data-height="800">
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		lazyLoad();
+	});
+
+	function lazyLoad() {
+		$(window).on('load resize scroll', function lazyLoadHandler() {
+			var images = $("img[data-src]");
+			// load images that have entered the viewport
+			images.each(function (index) {
+				var image = $(this);
+				ratioCalculate(image);
+				if (isElementInViewport(image)) {
+					image.attr("src", image.attr("data-src"));
+					image.removeAttr("data-src");
+				}
+			});
+			// if all the images are loaded, stop calling the handler
+			if (!images.length) {
+				$(window).off('load resize scroll', lazyLoadHandler);
+			}
+		}).trigger('scroll');
+
+		//calculating width and height for blank images
+		function ratioCalculate(image){
+			var width = image.data('width'),
+				height = image.data('height'),
+				parentWidth = image.parent().width(),
+				ratio;
+			if(width <= parentWidth){
+				image.attr({
+					width: width,
+					height: height
+				});
+			} else{
+				ratio = height/width;
+				image.attr({
+					width: parentWidth,
+					height: Math.floor(parentWidth * ratio)
+				});
+			}
+		}
+
+		//checking if element is in viewport
+		function isElementInViewport (el) {
+			var viewportHeight = $(window).height(),
+				windowScroll = $(window).scrollTop(),
+				imageOffset = el.offset().top;
+			return imageOffset <= viewportHeight + windowScroll;
+		}
+	}
+
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>pop up</title>
+	<title>sticky header</title>
 	<style>
 		html, body{
 			box-sizing: border-box;}
@@ -58,17 +58,17 @@
 		var sticky = $('.sticky-header'),
 			stickyHeight = sticky.outerHeight(),
 			stickyHeightAnimated = $('.menu').outerHeight(),
-			stickyStart = 1,
+			stickyStart = 10,
 			body = $('body'),
 			timer = 500;
 
 		$(window).scroll(function(){
-			if($(this).scrollTop() > stickyStart){
+			if($(this).scrollTop() > stickyStart && !sticky.hasClass('fixed')){
 				sticky.addClass('fixed').animate({height: stickyHeightAnimated}, timer);
 				body.animate({'padding-top': stickyHeight}, timer);
-			} else{
-				sticky.stop( true, true ).css({height: stickyHeight}).removeClass('fixed');
-				body.stop( true, true ).css({'padding-top': 0});
+			} else if($(this).scrollTop() == 0){
+				body.css({'padding-top': 0});
+				sticky.removeClass('fixed').stop(true, true).animate({height: stickyHeight}, timer);
 			}
 		}).trigger('scroll');
 	}

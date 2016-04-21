@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>lazy loading</title>
+	<style>
+		html, body{
+			box-sizing: border-box;}
+		body{
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		p{
+			margin: 0;
+		}
+		img{
+			max-width: 100%;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+<p>
+	Загрузка изображений в момент подскролливания к ним и отображение их с эффектом (самодельный image lazy loading)
+</p>
+<div class="image-wrapper"><img src="" data-src="img/banner-jamaica.jpg" alt=""></div>
+<div class="image-wrapper"><img src="" data-src="img/home-slide-1.jpg" alt=""></div>
+<div class="image-wrapper"><img src="" data-src="img/home-slide-2.jpg" alt=""></div>
+<div class="image-wrapper"><img src="" data-src="img/map-sample.jpg" alt=""></div>
+<div class="image-wrapper"><img src="" data-src="img/single-page-slider-2.jpg"></div>
+<div class="image-wrapper"><img src="" data-src="img/single-page-slider-3.jpg"></div>
+<div class="image-wrapper"><img src="" data-src="img/single-page-slider-4.jpg"></div>
+<div class="image-wrapper"><img src="" data-src="img/single-page-slider-5.jpg"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	$(function(){
+		lazyLoad();
+	});
+
+	function lazyLoad(){
+		$(window).on('load resize scroll', function () {
+			var images = $("img[data-src]");
+			// load images that have entered the viewport
+			$(images).each(function (index) {
+				if (isElementInViewport(this)) {
+					$(this).attr("src", $(this).attr("data-src"));
+					$(this).removeAttr("data-src");
+				}
+			});
+			// if all the images are loaded, stop calling the handler
+			if (images.length == 0) {
+				$(window).off('DOMContentLoaded load resize scroll')
+			}
+		});
+
+		function isElementInViewport (el) {
+			var rect = el.getBoundingClientRect();
+			return (
+					rect.top >= 0 &&
+					rect.left >= 0 &&
+					rect.bottom <= $(window).height() &&
+					rect.right <= $(window).width()
+			);
+		}
+	}
+
+</script>
+</body>
+</html>
