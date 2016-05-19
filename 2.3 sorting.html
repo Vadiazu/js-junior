@@ -123,8 +123,16 @@
 
 		//desc sorting
 		desc.on('click', function(){
-			itemsArray.sort();
-			itemsArray.reverse();
+			itemsArray.sort(function(a, b){
+				if (a > b) {
+					return -1;
+				}
+				if (a < b) {
+					return 1;
+				}
+
+				return 0;
+			});
 
 			for(var j=0; j < listItems.length; j++){
 				listItems[j].innerHTML = itemsArray[j];

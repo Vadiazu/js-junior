@@ -115,12 +115,7 @@
 			zoomImg = wrapper.find('img.zoomed-img'),
 			zoomImgWidth = zoomImg.width(),
 			zoomImgHeight = zoomImg.height(),
-			isMobile = false;
-
-		//checking for mobile devices
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			isMobile = true;
-		}
+			isMobile = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
 
 		//firing element show on click for mobile and on hover for desktop
 		if(isMobile){
@@ -179,31 +174,39 @@
 	}
 
 	function initHover(){
-		var isMobile = false, timer = 400, showEffect;
-
-		//checking for mobile devices
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			isMobile = true;
-		}
+		var item = $('.item-wrapper'),
+			isMobile = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+			timer = 400,
+			showEffect;
 
 		//firing element show on click for mobile and on hover for desktop
 		if(isMobile){
-			$('.item-wrapper').on('click', function(){
-				if($(this).hasClass('opened')){
-					hideElement($(this));
-				} else{
+			var currentItem, prevItem;
+			item.on('click', function(e){
+				//adding current item
+				currentItem = $(e.target);
+				if(!$(this).hasClass('opened')){
+					hideElement($('.item-wrapper.opened'));
 					showElement($(this));
+					$(document).on('click', outsideClickHandler);
 				}
-				$(this).toggleClass('opened');
 			});
 		} else{
-			$('.item-wrapper').on({
+			item.on({
 				mouseenter: function(){
-				showElement($(this));
-			},
+					showElement($(this));
+				},
 				mouseleave: function(){
-				hideElement($(this));
-			}});
+					hideElement($(this));
+				}
+			});
+		}
+
+		//checking outside click for mobiles
+		function outsideClickHandler(e){
+			if(!$(e.target).closest('.item-wrapper').length){
+				hideElement($('.item-wrapper.opened'));
+			}
 		}
 
 		//show element
@@ -211,15 +214,17 @@
 			var slideItem = element.find('.content-slide');
 			showEffect = element.data('effect');
 			if(showEffect == 'slide'){
-				slideItem.animate({top: 0}, timer);
+				slideItem.animate({top: 0}, {queue: false}, timer);
 			}
 			if(showEffect == 'fade'){
 				slideItem.css({
 					opacity: 0,
 					top: 0
 				});
-				slideItem.animate({opacity: 1}, timer);
+				slideItem.animate({opacity: 1}, {queue: false}, timer);
 			}
+
+			element.addClass('opened')
 		}
 
 		//hide element
@@ -234,6 +239,12 @@
 					slideItem.removeAttr('style');
 				}, timer);
 			}
+
+			if(isMobile){
+				$(document).off('click', outsideClickHandler);
+			}
+
+			element.removeClass('opened');
 		}
 	}
 </script>
