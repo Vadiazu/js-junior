@@ -17,7 +17,7 @@
 		}
 		.hover-wrapper{
 			position: relative;
-			width: 201px;
+			width: 301px;
 			border-top: 1px solid #000;
 			border-right: 1px solid #000;
 			overflow: hidden;
@@ -58,6 +58,18 @@
 	<div class="hover-item"></div>
 	<div class="hover-item"></div>
 	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
+	<div class="hover-item"></div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
@@ -70,17 +82,8 @@
 		var itemHover = $('.hover-item'),
 			itemFloat = $('<div class="float-hover"></div>'),
 			itemContainer = $('.hover-wrapper'),
-			timer = 400,
-			firstHover = false;
-
-		//first hover float element position
-		itemContainer.on({
-			mouseenter: function(e){
-				var mouseX = e.pageX,
-					mouseY = e.pageY;
-				console.log(mouseX, mouseY);
-			}
-		});
+			timer = 250,
+			firstHover = true;
 
 		//moving float hover
 		itemHover.on({
@@ -88,19 +91,50 @@
 				var item = $(this),
 					posX = item.position().left,
 					posY = item.position().top;
-
-				//adding float element to container
+				if(firstHover){
+					calculatePosition(posX, posY, item);
+				}
 				itemContainer.append(itemFloat);
-
-				//animating element
-				itemFloat.animate({top: posY,left: posX}, timer);
-			},
-			mouseout: function (e) {
-				itemFloat.remove();
+				itemFloat.animate({top: posY, left: posX, queue: true}, timer);
+				firstHover = false;
 			}
 		});
 
-		//first show position
+		$(document).on('mousemove', function(){
+			if(!itemContainer.is(':hover')){
+				firstHover = true;
+				itemFloat.remove();
+				itemFloat.removeAttr('style');
+			}
+		});
+
+		function calculatePosition(x, y, item){
+			var itemX = parseInt(x),
+				itemY = parseInt(y),
+				left = 0,
+				top = 0,
+				itemWidth = item.outerWidth(),
+				itemHeight = item.outerHeight();
+
+			if(itemX == 0){
+				left = -itemWidth;
+			} else if(itemX + itemWidth == itemContainer.width()){
+				left = itemX + itemWidth;
+			} else {
+				left = itemX;
+			}
+
+			if(itemY == 0){
+				top = -itemHeight;
+			} else if(itemY + itemHeight == itemContainer.height()){
+				top = itemY + itemHeight;
+			} else {
+				top = itemY;
+			}
+
+			startPosition(left, top);
+		}
+
 		function startPosition(left, top){
 			itemFloat.css({
 				left: left,

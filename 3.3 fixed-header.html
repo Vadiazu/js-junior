@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>sticky header</title>
 	<style>
-		html, body{
+		*{
 			box-sizing: border-box;}
 		body{
 			height: 2000px;
@@ -18,7 +18,11 @@
 			border-bottom: 2px solid #444;
 			height: 80px;
 			background: #ffffff;
-			-webkit-transform: translateZ(0);
+			-webkit-transform: translate3d(0,0,0);
+			transform: translate3d(0,0,0);
+			transition: all 0.3s linear;
+			z-index: 99999;
+			position: relative;
 		}
 		.sticky-header.fixed{
 			position: fixed;
@@ -48,30 +52,32 @@
 </p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="scrollRange.js"></script>
 <script>
 	// page init
 	$(function(){
-		initSticky();
+		ScrollRange.addPoint(100, function(){
+			console.log('dasda');
+		});
 	});
 
-	function initSticky(){
-		var sticky = $('.sticky-header'),
-			stickyHeight = sticky.outerHeight(),
-			stickyHeightAnimated = $('.menu').outerHeight(),
-			stickyStart = 10,
-			body = $('body'),
-			timer = 500;
-
-		$(window).scroll(function(){
-			if($(this).scrollTop() > stickyStart && !sticky.hasClass('fixed')){
-				sticky.addClass('fixed').animate({height: stickyHeightAnimated}, timer);
-				body.animate({'padding-top': stickyHeight}, timer);
-			} else if($(this).scrollTop() == 0){
-				body.css({'padding-top': 0});
-				sticky.removeClass('fixed').stop(true, true).animate({height: stickyHeight}, timer);
-			}
-		}).trigger('scroll');
-	}
+//	function initSticky(){
+//		var sticky = $('.sticky-header'),
+//			stickyHeight = sticky.outerHeight(),
+//			stickyHeightAnimated = $('.menu').outerHeight(),
+//			stickyStart = 0,
+//			body = $('body');
+//
+//		$(window).scroll(function(){
+//			if($(this).scrollTop() > stickyStart && !sticky.hasClass('fixed')){
+//				sticky.addClass('fixed').css({height: stickyHeightAnimated});
+//				body.css({'padding-top': stickyHeightAnimated});
+//			} else if($(this).scrollTop() == 0){
+//				sticky.css({height: stickyHeight}).removeClass('fixed');
+//				body.css({'padding-top': 0});
+//			}
+//		}).trigger('scroll');
+//	}
 
 </script>
 </body>

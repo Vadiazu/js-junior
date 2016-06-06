@@ -62,6 +62,16 @@
 	<img src="http://lorempixel.com/1400/1200/sports/8">
 	<img src="http://lorempixel.com/1400/1200/sports/9">
 	<img src="http://lorempixel.com/1400/1200/sports/10">
+	<img src="http://lorempixel.com/1400/1200/sports/1">
+	<img src="http://lorempixel.com/1400/1200/sports/2">
+	<img src="http://lorempixel.com/1400/1200/sports/3">
+	<img src="http://lorempixel.com/1400/1200/sports/4">
+	<img src="http://lorempixel.com/1400/1200/sports/5">
+	<img src="http://lorempixel.com/1400/1200/sports/6">
+	<img src="http://lorempixel.com/1400/1200/sports/7">
+	<img src="http://lorempixel.com/1400/1200/sports/8">
+	<img src="http://lorempixel.com/1400/1200/sports/9">
+	<img src="http://lorempixel.com/1400/1200/sports/10">
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
@@ -74,18 +84,27 @@
 		var preloader = $('<div class="preloader"><div class="text">Loading <span class="percentage">0</span></div></div>'),
 			preloaderHolder = $('body'),
 			content = $('img'),
-			percentCounter = 0;
+			percentCounter = 0,
+			iterator = 100/content.length;
 
 		//adding preloader to body
 		preloaderHolder.addClass('loading').append(preloader);
 
 		//imitation of preloader with image load
 		content.each(function(index) {
+			$(this).error(function(){
+				percentageCount(index);
+			});
 			$(this).load(function() {
-				percentCounter = (index / content.length) * 100;
-				$('.percentage').text(percentCounter + '%');
+				percentageCount(index);
 			});
 		});
+
+		function percentageCount(index){
+			percentCounter = percentCounter + iterator;
+			console.log(percentCounter);
+			$('.percentage').text(percentCounter + '%');
+		}
 
 		//removing preloader after content load
 		$(window).on('load', function lazyLoadHandler() {
