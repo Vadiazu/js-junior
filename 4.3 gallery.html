@@ -19,41 +19,60 @@
 		img{
 			max-width: 100%;
 		}
-		div.cycle-gallery {
+		.cycle-gallery {
 			position: relative;
+			width: 600px;
+			margin: 40px auto;
 		}
-		div.cycle-gallery div.mask {
+		.cycle-gallery .mask-main {
 			position: relative;
 			overflow: hidden;
 			width: 600px;
 		}
-		div.cycle-gallery div.mask div.slideset {
+		.cycle-gallery .mask-main .slideset-main {
 			width: 99999px;
 			float: left;
 		}
-		div.cycle-gallery div.mask div.slide {
+		.cycle-gallery .mask-main .slide-main {
 			width: 600px;
+			height: 340px;
 			float: left;
 		}
-		div.cycle-gallery div.mask div.slide.active {
+		.cycle-gallery .mask-main .slide-main img{
+			height: 340px;
+			width: 100%;
+		}
+		.cycle-gallery .mask-main .slide-main.active {
 			z-index: 1;
 		}
 		/* carousel basic styles */
-		div.carousel {
+		.carousel {
 			position: relative;
 		}
-		div.carousel div.mask {
+		.carousel .mask {
 			position: relative;
 			overflow: hidden;
 			width: 600px;
 		}
-		div.carousel div.mask div.slideset {
+		.carousel .mask .slideset {
 			width: 99999px;
 			float: left;
+			padding: 0;
+			margin: 0;
+			list-style: none;
 		}
-		div.carousel div.mask div.slide {
-			width: 600px;
+		.carousel .mask .slide {
+			width: 300px;
+			height: 170px;
+			padding: 10px;
 			float: left;
+		}
+		.carousel .mask .slide.active img{
+			border: 1px solid red;
+		}
+		.carousel .mask .slide img{
+			height: 150px;
+			width: 100%;
 		}
 	</style>
 </head>
@@ -63,81 +82,113 @@
 </p>
 <!-- cycle carousel structure example -->
 <div class="cycle-gallery">
-	<div class="mask">
-		<div class="slideset">
-			<div class="slide">
+	<a class="btn-cycle-prev" href="#">Previous</a>
+	<a class="btn-cycle-next" href="#">Next</a>
+	<div class="mask-main">
+		<div class="slideset-main">
+			<div class="slide-main">
 				<img src="img/single-page-slider-2.jpg" alt="">
 			</div>
-			<div class="slide">
+			<div class="slide-main">
 				<img src="img/single-page-slider-3.jpg" alt="">
 			</div>
-			<div class="slide">
+			<div class="slide-main">
 				<img src="img/single-page-slider-4.jpg" alt="">
 			</div>
-			<div class="slide">
+			<div class="slide-main">
 				<img src="img/single-page-slider-5.jpg" alt="">
+			</div>
+			<div class="slide-main">
+				<img src="img/map-sample.jpg" alt="">
+			</div>
+			<div class="slide-main">
+				<img src="img/banner-jamaica.jpg" alt="">
 			</div>
 		</div>
 	</div>
-</div>
-<div class="thumbs-gallery carousel">
-	<div class="mask">
-		<div class="slideset">
-			<div class="slide">
-				<img src="img/single-page-slider-2.jpg" alt="">
-			</div>
-			<div class="slide">
-				<img src="img/single-page-slider-3.jpg" alt="">
-			</div>
-			<div class="slide">
-				<img src="img/single-page-slider-4.jpg" alt="">
-			</div>
-			<div class="slide">
-				<img src="img/single-page-slider-5.jpg" alt="">
-			</div>
+	<div class="thumbs-gallery carousel">
+		<div class="mask">
+			<ul class="slideset pager">
+				<li class="slide">
+					<a href="#">
+						<img src="img/single-page-slider-2.jpg" alt="">
+					</a>
+				</li>
+				<li class="slide">
+					<a href="#">
+						<img src="img/single-page-slider-3.jpg" alt="">
+					</a>
+				</li>
+				<li class="slide">
+					<a href="#">
+						<img src="img/single-page-slider-4.jpg" alt="">
+					</a>
+				</li>
+				<li class="slide">
+					<a href="#">
+						<img src="img/single-page-slider-5.jpg" alt="">
+					</a>
+				</li>
+				<li class="slide">
+					<a href="#">
+						<img src="img/map-sample.jpg" alt="">
+					</a>
+				</li>
+				<li class="slide">
+					<a href="#">
+						<img src="img/banner-jamaica.jpg" alt="">
+					</a>
+				</li>
+			</ul>
+			<a class="btn-prev" href="#">Previous</a>
+			<a class="btn-next" href="#">Next</a>
 		</div>
-		<a class="btn-prev" href="#">Previous</a>
-		<a class="btn-next" href="#">Next</a>
 	</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
 	// page init
 	jQuery(function(){
-		initCarousel();
 		initCycleCarousel();
 	});
-
-	// scroll gallery init
-	function initCarousel() {
-		jQuery('div.thumbs-gallery').scrollGallery({
-			mask: 'div.mask',
-			slider: 'div.slideset',
-			slides: 'div.slide',
-			btnPrev: 'a.btn-prev',
-			btnNext: 'a.btn-next',
-			pagerLinks: 'div.cycle-gallery',
-			autoRotation: false,
-			switchTime: 3000,
-			animSpeed: 500
-		});
-	}
-
 
 	// cycle scroll gallery init
 	function initCycleCarousel() {
 		jQuery('div.cycle-gallery').scrollAbsoluteGallery({
-			mask: 'div.mask',
-			slider: 'div.slideset',
-			slides: 'div.slide',
-			btnPrev: 'a.btn-prev',
-			btnNext: 'a.btn-next',
-			pagerLinks: '.pagination li',
+			mask: 'div.mask-main',
+			slider: 'div.slideset-main',
+			slides: 'div.slide-main',
+			btnPrev: '.btn-cycle-prev',
+			btnNext: '.btn-cycle-next',
+			pagerLinks: '.pager li',
 			pauseOnHover: true,
 			autoRotation: false,
 			maskAutoSize: true,
 			switchTime: 3000,
-			animSpeed: 500
+			animSpeed: 500,
+			onInit: function() {
+				this.holder.find('div.thumbs-gallery').scrollGallery({
+					mask: 'div.mask',
+					slider: 'ul.slideset',
+					slides: 'li.slide',
+					btnPrev: 'a.btn-prev',
+					btnNext: 'a.btn-next',
+					autoRotation: false,
+					switchTime: 3000,
+					animSpeed: 500,
+					onBeforeChange: function() {
+//						console.log(this.currentStep);
+					}
+				});
+
+				this.pagerAPI = this.holder.find('div.thumbs-gallery').data('ScrollGallery');
+			},
+			onBeforeChange: function() {
+				var totalSlides = this.pagerAPI.allNum,
+					currentSlide = this.currentIndex
+				console.log(totalSlides)
+//				this.pagerAPI.numSlide(this.currentIndex);
+			}
 		});
 	}
 
@@ -515,7 +566,7 @@
 				this.refreshState();
 
 				// onchange callback
-				this.makeCallback('onBeforeChange', this);
+				this.makeCallback('onBeforeChange', this, this.currentStep);
 			},
 			refreshState: function(initial) {
 				if(this.options.step === 1 || this.stepsCount === this.slides.length) {
@@ -691,6 +742,7 @@
 					this.pagerLinks = this.buildPagination();
 				} else {
 					this.pagerLinks = this.holder.find(this.options.pagerLinks);
+
 				}
 
 				// define index variables
@@ -756,6 +808,7 @@
 					this.btnNext.click(this.btnNextHandler);
 				}
 				if(this.pagerLinks.length) {
+
 					this.pagerLinksHandler = function(e) {
 						e.preventDefault();
 						self.numSlide(self.pagerLinks.index(e.currentTarget));

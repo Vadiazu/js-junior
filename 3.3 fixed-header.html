@@ -52,32 +52,29 @@
 </p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="scrollRange.js"></script>
 <script>
 	// page init
 	$(function(){
-		ScrollRange.addPoint(100, function(){
-			console.log('dasda');
-		});
+		initSticky();
 	});
 
-//	function initSticky(){
-//		var sticky = $('.sticky-header'),
-//			stickyHeight = sticky.outerHeight(),
-//			stickyHeightAnimated = $('.menu').outerHeight(),
-//			stickyStart = 0,
-//			body = $('body');
-//
-//		$(window).scroll(function(){
-//			if($(this).scrollTop() > stickyStart && !sticky.hasClass('fixed')){
-//				sticky.addClass('fixed').css({height: stickyHeightAnimated});
-//				body.css({'padding-top': stickyHeightAnimated});
-//			} else if($(this).scrollTop() == 0){
-//				sticky.css({height: stickyHeight}).removeClass('fixed');
-//				body.css({'padding-top': 0});
-//			}
-//		}).trigger('scroll');
-//	}
+	function initSticky(){
+		var sticky = $('.sticky-header'),
+			stickyHeight = sticky.outerHeight(),
+			stickyHeightAnimated = $('.menu').outerHeight(),
+			stickyStart = 0,
+			body = $('body');
+
+		$(window).scroll(function(){
+			if($(this).scrollTop() > stickyStart && !sticky.hasClass('fixed')){
+				sticky.addClass('fixed').css({height: stickyHeightAnimated});
+				body.css({'padding-top': stickyHeightAnimated});
+			} else if($(this).scrollTop() == 0){
+				sticky.css({height: stickyHeight}).removeClass('fixed');
+				body.css({'padding-top': 0});
+			}
+		}).trigger('scroll');
+	}
 
 </script>
 </body>
