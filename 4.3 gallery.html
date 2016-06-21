@@ -67,7 +67,10 @@
 			padding: 10px;
 			float: left;
 		}
-		.carousel .mask .slide.active img{
+		.carousel .mask .slide img{
+			border: 1px solid transparent;
+		}
+		.carousel .mask .slide.active-slide img{
 			border: 1px solid red;
 		}
 		.carousel .mask .slide img{
@@ -87,22 +90,22 @@
 	<div class="mask-main">
 		<div class="slideset-main">
 			<div class="slide-main">
-				<img src="img/single-page-slider-2.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/single-page-slider-2.jpg" data-width="640" data-height="340">
 			</div>
 			<div class="slide-main">
-				<img src="img/single-page-slider-3.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/single-page-slider-3.jpg" data-width="640" data-height="340">
 			</div>
 			<div class="slide-main">
-				<img src="img/single-page-slider-4.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/single-page-slider-4.jpg" data-width="640" data-height="340">
 			</div>
 			<div class="slide-main">
-				<img src="img/single-page-slider-5.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/single-page-slider-5.jpg" data-width="640" data-height="340">
 			</div>
 			<div class="slide-main">
-				<img src="img/map-sample.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/map-sample.jpg" data-width="640" data-height="340">
 			</div>
 			<div class="slide-main">
-				<img src="img/banner-jamaica.jpg" alt="">
+				<img src="img/blank.gif" data-src="img/banner-jamaica.jpg" data-width="640" data-height="340">
 			</div>
 		</div>
 	</div>
@@ -167,7 +170,8 @@
 			switchTime: 3000,
 			animSpeed: 500,
 			onInit: function() {
-				this.holder.find('div.thumbs-gallery').scrollGallery({
+				var self = this;
+				self.holder.find('div.thumbs-gallery').scrollGallery({
 					mask: 'div.mask',
 					slider: 'ul.slideset',
 					slides: 'li.slide',
@@ -176,22 +180,60 @@
 					autoRotation: false,
 					switchTime: 3000,
 					animSpeed: 500,
-					onBeforeChange: function() {
-//						console.log(this.currentStep);
-					}
+					step: 1
 				});
 
-				this.pagerAPI = this.holder.find('div.thumbs-gallery').data('ScrollGallery');
+				lazyLoad(self);
+				self.holder.find('.slide').eq(0).addClass('active-slide');
+				self.pagerAPI = self.holder.find('div.thumbs-gallery').data('ScrollGallery');
 			},
 			onBeforeChange: function() {
-				var totalSlides = this.pagerAPI.allNum,
-					currentSlide = this.currentIndex
-				console.log(totalSlides)
-//				this.pagerAPI.numSlide(this.currentIndex);
+				var thumbsParent = this,
+					currentSlide = thumbsParent.currentIndex,
+					prevSlide = thumbsParent.prevIndex,
+					totalSlides = this.slides.length - 1,
+					thumbsAPI = this.pagerAPI,
+					thumbs = thumbsAPI.slides,
+					visibleSlides = this.pagerAPI.mask.outerWidth();
+
+				lazyLoad(thumbsParent);
+				thumbs.removeClass('active-slide');
+				thumbs.eq(currentSlide).addClass('active-slide');
+				thumbs.each(function () {
+					var self = $(this);
+					if(self.hasClass('active-slide') && currentSlide != totalSlides && currentSlide != 0){
+						if(self.position().left >= visibleSlides){
+							thumbsAPI.nextSlide();
+						} else if(self.position().left < 0){
+							thumbsAPI.prevSlide();
+						}
+					} else if(self.hasClass('active-slide') && currentSlide == 0){
+						if(prevSlide == totalSlides){
+							thumbsAPI.nextSlide();
+						} else {
+							thumbsAPI.prevSlide();
+						}
+					} else if(self.hasClass('active-slide') && currentSlide == totalSlides){
+						if(prevSlide == 0){
+							thumbsAPI.prevSlide();
+						} else{
+							thumbsAPI.nextSlide();
+						}
+					}
+				});
 			}
 		});
 	}
 
+	function lazyLoad(elem){
+		var image = elem.holder.find('.slide-main.active img'),
+			src = image.attr('data-src');
+
+		if (typeof src !== typeof undefined && src !== false) {
+			image.attr("src", image.attr("data-src"));
+			image.removeAttr("data-src");
+		}
+	}
 	/*
 	 * jQuery Carousel plugin
 	 */

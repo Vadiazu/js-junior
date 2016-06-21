@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>responsive block</title>
+	<style>
+		*{
+			box-sizing: border-box;}
+		body, html{
+			width: 100%;
+		}
+		p{
+			margin: 0;
+		}
+		body{
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			overflow-x: hidden;
+		}
+		.block-1,
+		.block-2,
+		.block-3,
+		.block-4,
+		.block-5{
+			height: 150px;
+			width: 100%;
+		}
+		.block-1{
+			background: red;
+		}
+		.block-2{
+			background: yellow;
+		}
+		.block-3{
+			background: green;
+		}
+		.block-4{
+			background: blue;
+		}
+		.block-5{
+			background: peru;
+		}
+	</style>
+</head>
+<body>
+<div class="block-1">
+	<p>
+		Responsive - переместить блок при ресайзе для мобильной версии в другое место по коду
+	</p>
+</div>
+<div class="block-2">
+	second block
+</div>
+<div class="block-3">
+	moved block
+</div>
+<div class="block-4">
+	block block block
+</div>
+<div class="block-5">
+	super last block
+</div>
+<!-- cycle carousel structure example -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	jQuery(function(){
+		initResizeBlock('768', $('.block-3'), $('.block-5'), 'after');
+	});
+
+	function initResizeBlock(changePoint, moveBlock, placeBlock, placeDirection){
+		$(window).on('resize', function(){
+			if($(window).width() <= changePoint){
+				initMoveBlock(moveBlock, placeBlock, placeDirection);
+			}
+		}).trigger('resize');
+	}
+
+	function initMoveBlock(moveBlock, placeBlock, placeDirection){
+		if(placeDirection == 'before'){
+			moveBlock.insertBefore(placeBlock);
+		} else {
+			moveBlock.insertAfter(placeBlock);
+		}
+	}
+
+</script>
+</body>
+</html>
