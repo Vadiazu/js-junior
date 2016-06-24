@@ -19,9 +19,8 @@
 			-moz-osx-font-smoothing: grayscale;
 			overflow-x: hidden;
 		}
-		.menu-opener{
-			text-align: center;
-			padding: 10px;
+		a{
+			text-decoration: none;
 		}
 		ul{
 			padding: 0;
@@ -38,64 +37,92 @@
 			width: 100%;
 			height: 0;
 		}
-		.navigation-block li{
+		.navigation-block > li{
 			display: inline-block;
 			position: relative;
+			padding: 10px 20px;
+			z-index: 1;
 		}
 		.sub-menu{
 			position: absolute;
 			left: 0;
 			top: 100%;
+			white-space: nowrap;
+			background: #fff;
+			padding: 10px;
+			border: 1px solid black;
+			display: none;
+		}
+		@media all and (max-width: 768px){
+			.navigation-block{
+				padding: 0;
+			}
+			.navigation-block > li{
+				display: block;
+				text-align: center;
+				border-bottom: 1px solid black;
+				padding: 0;
+			}
+			.navigation-block > li > a{
+				display: block;
+				padding: 10px 20px;
+				font-size: 20px;
+			}
+			.sub-menu{
+				position: static;
+				border-bottom: none;
+				border-left: none;
+				border-right: none;
+			}
 		}
 	</style>
 </head>
 <body>
 <div class="navigation-holder">
-	<div class="menu-opener">MENU</div>
 	<ul class="navigation-block">
 		<li>
 			<a href="#">Home</a>
 			<ul class="sub-menu">
-				<li>Home</li>
-				<li>Home 1</li>
-				<li>Home 2</li>
-				<li>Home 3</li>
+				<li><a href="#">Home</a></li>
+				<li><a href="#">Home 1</a></li>
+				<li><a href="#">Home 2</a></li>
+				<li><a href="#">Home 3</a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">Messages</a>
 			<ul class="sub-menu">
-				<li>Messages</li>
-				<li>Messages 1</li>
-				<li>Messages 2</li>
-				<li>Messages 3</li>
+				<li><a href="#">Messages</a></li>
+				<li><a href="#">Messages 1</a></li>
+				<li><a href="#">Messages 2</a></li>
+				<li><a href="#">Messages 3</a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">Options</a>
 			<ul class="sub-menu">
-				<li>Options</li>
-				<li>Options 1</li>
-				<li>Options 2</li>
-				<li>Options 3</li>
+				<li><a href="#">Options</a></li>
+				<li><a href="#">Options 1</a></li>
+				<li><a href="#">Options 2</a></li>
+				<li><a href="#">Options 3</a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">People</a>
 			<ul class="sub-menu">
-				<li>People</li>
-				<li>People 1</li>
-				<li>People 2</li>
-				<li>People 3</li>
+				<li><a href="#">People</a></li>
+				<li><a href="#">People 1</a></li>
+				<li><a href="#">People 2</a></li>
+				<li><a href="#">People 3</a></li>
 			</ul>
 		</li>
 		<li>
 			<a href="#">Contact</a>
 			<ul class="sub-menu">
-				<li>Contact</li>
-				<li>Contact 1</li>
-				<li>Contact 2</li>
-				<li>Contact 3</li>
+				<li><a href="#">Contact</a></li>
+				<li><a href="#">Contact 1</a></li>
+				<li><a href="#">Contact 2</a></li>
+				<li><a href="#">Contact 3</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -110,11 +137,73 @@
 <script>
 	// page init
 	jQuery(function(){
-		initNavigation();
+		initNavigation(768);
 	});
 
-	function initNavigation(){
+	function initNavigation(transformPoint){
+		var firstLevel = $('.navigation-block > li'),
+			allSubMenus = $('.sub-menu'),
+			timer = 500, hideTime;
 
+		$(window).on('resize', function(){
+			if($(window).width() >= transformPoint){
+				hideTime = 0;
+				clearAccordion(hideTime);
+			} else {
+				clearAccordion();
+			}
+		});
+
+		firstLevel.on({
+			mouseenter: function(){
+				if($(window).width() > transformPoint) {
+					showDesktop($(this), 'show');
+				}
+			},
+			mouseleave: function(){
+				if($(window).width() > transformPoint) {
+					showDesktop($(this));
+				}
+			},
+			click: function (e) {
+				e.preventDefault();
+				if($(window).width() <= transformPoint) {
+					showMobile($(this));
+				}
+			}
+		});
+
+		function showDesktop(parent, effect){
+			var subMenu = parent.children('.sub-menu');
+			if(effect == "show"){
+				subMenu.fadeIn(timer);
+			} else {
+				subMenu.fadeOut(timer);
+			}
+
+		}
+
+		function showMobile(parent){
+			var subMenu = parent.children('.sub-menu');
+
+			if(parent.hasClass('active')){
+				subMenu.slideUp(timer);
+			} else {
+				clearAccordion();
+				subMenu.slideDown(timer);
+			}
+
+			parent.toggleClass('active');
+		}
+
+		function clearAccordion(hideTime){
+			firstLevel.removeClass('active');
+			if(hideTime == 0){
+				allSubMenus.removeAttr('style');
+			} else{
+				allSubMenus.slideUp(timer);
+			}
+		}
 	}
 
 </script>
