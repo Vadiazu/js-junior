@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>ios menu</title>
+	<style>
+		*{
+			box-sizing: border-box;}
+		body, html{
+			width: 100%;
+		}
+		body{
+			margin: 0;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			overflow-x: hidden;
+		}
+		.menu{
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			position: relative;
+			width: 100%;
+		}
+		.menu-holder{
+			position: relative;
+			width: 100%;
+		}
+		.menu a{
+			display: block;
+			padding: 10px;
+			font-size: 18px;
+			border-bottom: 2px solid black;
+		}
+		.menu-block{
+			display: none;
+			padding: 20px;
+		}
+		.menu-block.active{
+			display: block;
+		}
+		.sidebar{
+			position: absolute;
+			left: 100%;
+			top: 0;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+<div class="menu-holder">
+	<ul class="menu">
+		<li><a class="menu-opener" href="#block-1">menu 1</a></li>
+		<li><a class="menu-opener" href="#block-2">menu 2</a></li>
+		<li><a class="menu-opener" href="#block-3">menu 3</a></li>
+		<li><a class="menu-opener" href="#block-4">menu 4</a></li>
+		<li><a class="menu-opener" href="#block-5">menu 5</a></li>
+	</ul>
+	<p>
+		Multilevel menu как в iOS с кнопкой back (проконсультироваться перед началом работы)
+	</p>
+</div>
+<div class="sidebar">
+	<a href="#" class="back-btn">Back to menu</a>
+	<div id="block-1" class="menu-block">
+		first menu block
+	</div>
+	<div id="block-2" class="menu-block">
+		second menu block
+	</div>
+	<div id="block-3" class="menu-block">
+		third menu block
+	</div>
+	<div id="block-4" class="menu-block">
+		fourth menu block
+	</div>
+	<div id="block-5" class="menu-block">
+		fifth menu block
+	</div>
+</div>
+<!-- cycle carousel structure example -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+	// page init
+	jQuery(function(){
+		initMultilevelMenu();
+	});
+
+	function initMultilevelMenu(){
+		var menuItems = $('.menu-opener'),
+			backBtn = $('.back-btn'),
+			menuBlocks = $('.menu-block'),
+			menuHolder = $('.menu-holder'),
+			blocksHolder = $('.sidebar'),
+			timer = 300;
+
+		menuItems.on('click', function(e){
+			e.preventDefault();
+			var item = $(this),
+				menuId = item.attr('href').substring(1);
+			showMenu(menuId);
+		});
+
+		backBtn.on('click', function (e) {
+			e.preventDefault();
+			hideMenu();
+		});
+
+		function showMenu(blockId){
+			$('#' + blockId).addClass('active');
+			menuHolder.animate({
+				left: '-100%'
+			}, timer);
+			blocksHolder.animate({
+				left: 0
+			}, timer);
+		}
+
+		function hideMenu(){
+			menuBlocks.removeClass('active');
+			menuHolder.animate({
+				left: 0
+			}, timer);
+			blocksHolder.animate({
+				left: '100%'
+			}, timer);
+		}
+	}
+</script>
+</body>
+</html>
