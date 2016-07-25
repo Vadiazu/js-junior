@@ -45,6 +45,7 @@
 	</style>
 </head>
 <body>
+<div class="holder-for-moved-block"></div>
 <div class="block-1">
 	<p>
 		Responsive - переместить блок при ресайзе для мобильной версии в другое место по коду
@@ -68,24 +69,26 @@
 <script src="enquire.min.js"></script>
 <script>
 	// page init
-	jQuery(function(){
-		initResizeBlock('768', $('.block-3'), $('.block-5'), 'after');
+	$(function(){
+		initMoveBlock();
 	});
 
-	function initResizeBlock(changePoint, moveBlock, placeBlock, placeDirection){
-		$(window).on('resize', function(){
-			if($(window).width() <= changePoint){
-				initMoveBlock(moveBlock, placeBlock, placeDirection);
-			}
-		}).trigger('resize');
-	}
+	function initMoveBlock(){
+		var blockToMove = $('.block-4'),
+			blockMoveTo = $('.holder-for-moved-block'),
+			placeholderBlock = $('<div data-role="placeholder"></div>'),
+			movePoint = "screen and (max-width: 600px)";
 
-	function initMoveBlock(moveBlock, placeBlock, placeDirection){
-		if(placeDirection == 'before'){
-			moveBlock.insertBefore(placeBlock);
-		} else {
-			moveBlock.insertAfter(placeBlock);
-		}
+		enquire.register(movePoint, {
+			match : function() {
+				placeholderBlock.insertBefore(blockToMove);
+				blockMoveTo.append(blockToMove);
+			},
+			unmatch : function() {
+				blockToMove.insertBefore(placeholderBlock);
+				placeholderBlock.remove();
+			}
+		});
 	}
 
 </script>

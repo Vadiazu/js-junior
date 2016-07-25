@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>responsive block</title>
+	<title>responsive menu</title>
 	<style>
 		*{
 			box-sizing: border-box;}
@@ -81,7 +81,7 @@
 <div class="navigation-holder">
 	<ul class="navigation-block">
 		<li>
-			<a href="#">Home</a>
+			<a class="accordion-open" href="#">Home</a>
 			<ul class="sub-menu">
 				<li><a href="#">Home</a></li>
 				<li><a href="#">Home 1</a></li>
@@ -90,7 +90,7 @@
 			</ul>
 		</li>
 		<li>
-			<a href="#">Messages</a>
+			<a class="accordion-open" href="#">Messages</a>
 			<ul class="sub-menu">
 				<li><a href="#">Messages</a></li>
 				<li><a href="#">Messages 1</a></li>
@@ -99,7 +99,7 @@
 			</ul>
 		</li>
 		<li>
-			<a href="#">Options</a>
+			<a class="accordion-open" href="#">Options</a>
 			<ul class="sub-menu">
 				<li><a href="#">Options</a></li>
 				<li><a href="#">Options 1</a></li>
@@ -108,7 +108,7 @@
 			</ul>
 		</li>
 		<li>
-			<a href="#">People</a>
+			<a class="accordion-open" href="#">People</a>
 			<ul class="sub-menu">
 				<li><a href="#">People</a></li>
 				<li><a href="#">People 1</a></li>
@@ -117,7 +117,7 @@
 			</ul>
 		</li>
 		<li>
-			<a href="#">Contact</a>
+			<a class="accordion-open" href="#">Contact</a>
 			<ul class="sub-menu">
 				<li><a href="#">Contact</a></li>
 				<li><a href="#">Contact 1</a></li>
@@ -138,54 +138,48 @@
 <script>
 	// page init
 	jQuery(function(){
-		initNavigation(768);
+		initNavigation();
 	});
 
-	function initNavigation(transformPoint){
+	function initNavigation(){
 		var firstLevel = $('.navigation-block > li'),
 			allSubMenus = $('.sub-menu'),
-			timer = 500, hideTime;
+			timer = 200, hideTime, parent, subMenu,
+			movePoint = "screen and (max-width: 768px)";
 
-		$(window).on('resize', function(){
-			if($(window).width() >= transformPoint){
+		enquire.register(movePoint, {
+			setup : function() {
+				firstLevel.on('mouseenter', function(event){menuHover(event, 'fadeIn')});
+				firstLevel.on('mouseleave', function(event){menuHover(event, 'fadeOut')});
+			},
+			match : function() {
+				firstLevel.off();
+				firstLevel.on('click', function(event){menuAccordion(event)});
+			},
+			unmatch : function() {
+				firstLevel.off();
+				firstLevel.on('mouseenter', function(event){menuHover(event, 'fadeIn')});
+				firstLevel.on('mouseleave', function(event){menuHover(event, 'fadeOut')});
 				hideTime = 0;
 				clearAccordion(hideTime);
-			} else {
-				clearAccordion();
 			}
 		});
 
-		firstLevel.on({
-			mouseenter: function(){
-				if($(window).width() > transformPoint) {
-					showDesktop($(this), 'show');
-				}
-			},
-			mouseleave: function(){
-				if($(window).width() > transformPoint) {
-					showDesktop($(this));
-				}
-			},
-			click: function (e) {
-				e.preventDefault();
-				if($(window).width() <= transformPoint) {
-					showMobile($(this));
-				}
-			}
-		});
+		function menuHover(e, fade){
+			parent = $(e.target);
+			subMenu = parent.children('.sub-menu');
 
-		function showDesktop(parent, effect){
-			var subMenu = parent.children('.sub-menu');
-			if(effect == "show"){
+			if( fade == 'fadeIn'){
 				subMenu.fadeIn(timer);
 			} else {
-				subMenu.fadeOut(timer);
+				allSubMenus.fadeOut(timer);
 			}
-
 		}
 
-		function showMobile(parent){
-			var subMenu = parent.children('.sub-menu');
+		function menuAccordion(e){
+			e.preventDefault();
+			parent = $(e.target).parent();
+			subMenu = parent.find('.sub-menu');
 
 			if(parent.hasClass('active')){
 				subMenu.slideUp(timer);
