@@ -54,7 +54,7 @@
 	jQuery(function(){
 		initAutoscalingMenu({
 			equalLinks: false,
-			flexible: false
+			flexible: true
 		});
 	});
 
@@ -96,20 +96,18 @@
 		}
 
 		if(!options.equalLinks && itemsWidth < parentWidth){
-			for (var i=0; countWidth(widthStorage) < parentWidth; i++){
+			var equalizeWidth = (parentWidth - itemsWidth)/listItems.length;
 
-			}
-		}
+			listItems.each(function(){
+				var cur = $(this),
+					curWidth = cur.outerWidth() + equalizeWidth;
 
-		function countWidth(storage){
-			var sum = 0;
-			for(var q = 0; q < storage.length; q++) {
-				console.log(widthStorage[q], sum);
-				sum += widthStorage[q] + 1;
-				widthStorage[q] = widthStorage[q] + 1;
-			}
-//			console.log(sum);
-			return sum;
+				if(options.flexible){
+					curWidth = curWidth/parentWidth * 100 + '%';
+				}
+
+				cur.parent().css('width', curWidth );
+			});
 		}
 
 	}
