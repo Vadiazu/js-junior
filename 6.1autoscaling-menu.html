@@ -52,17 +52,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
 	jQuery(function(){
-		initAutoscalingMenu({
-			equalLinks: false,
-			flexible: true
-		});
+		initAutoscalingMenu({equalLinks: false});
 	});
 
 	function initAutoscalingMenu(options){
 		if (!options.menuId) options.menuId = 'menu';
 		if (!options.menuItem) options.menuItem = '.menu-item';
 		if (!options.equalLinks) options.equalLinks = false;
-		if (!options.flexible) options.flexible = false;
 
 		var menu = $("#" + options.menuId),
 			listItems = $(options.menuItem),
@@ -85,26 +81,22 @@
 
 		});
 
-		if(options.equalLinks && maxWidth*listItems.length < parentWidth){
-			equalWidth = parentWidth/listItems.length;
+        if(parentWidth < itemsWidth){
+            options.equalLinks = true
+        }
 
-			if(options.flexible){
-				equalWidth = equalWidth/parentWidth * 100 + '%';
-			}
+		if(options.equalLinks){
+			equalWidth = (parentWidth/listItems.length)/parentWidth * 100 + '%';
 
 			listItems.parent().css('width', equalWidth);
 		}
 
-		if(!options.equalLinks && itemsWidth < parentWidth){
+		if(!options.equalLinks){
 			var equalizeWidth = (parentWidth - itemsWidth)/listItems.length;
 
 			listItems.each(function(){
 				var cur = $(this),
-					curWidth = cur.outerWidth() + equalizeWidth;
-
-				if(options.flexible){
-					curWidth = curWidth/parentWidth * 100 + '%';
-				}
+					curWidth = (cur.outerWidth() + equalizeWidth)/parentWidth * 100 + '%';
 
 				cur.parent().css('width', curWidth );
 			});
