@@ -154,7 +154,7 @@
 			},
 			match : function() {
 				firstLevel.off();
-				firstLevel.on('click', function(event){menuAccordion(event)});
+				firstLevel.find('.accordion-open').on('click', function(event){menuAccordion(event)});
 			},
 			unmatch : function() {
 				firstLevel.off();
@@ -170,9 +170,9 @@
 			subMenu = parent.children('.sub-menu');
 
 			if( fade == 'fadeIn'){
-				subMenu.fadeIn(timer);
+				subMenu.fadeIn({queue:false, duration: timer});
 			} else {
-				allSubMenus.fadeOut(timer);
+				allSubMenus.fadeOut({queue:false, duration: timer});
 			}
 		}
 
@@ -182,10 +182,10 @@
 			subMenu = parent.find('.sub-menu');
 
 			if(parent.hasClass('active')){
-				subMenu.slideUp(timer);
+				subMenu.slideUp({queue:false, duration: timer});
 			} else {
 				clearAccordion();
-				subMenu.slideDown(timer);
+				subMenu.slideDown({queue:false, duration: timer});
 			}
 
 			parent.toggleClass('active');
